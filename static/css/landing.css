@@ -1,0 +1,216 @@
+/* ------------------------------------------------------------------ */
+/* Hero — centered single-column layout                                */
+/* Overrides the two-column grid defined in style.css                  */
+/* ------------------------------------------------------------------ */
+
+.hero {
+    display: block;
+    padding: 5rem 2rem 5rem;
+    text-align: center;
+}
+
+/* ------------------------------------------------------------------ */
+/* Hero text block                                                      */
+/* ------------------------------------------------------------------ */
+
+.hero-center {
+    max-width: 680px;
+    margin: 0 auto 3.5rem;
+}
+
+.hero-pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--accent-light);
+    color: var(--accent);
+    border: 1px solid rgba(26, 71, 42, 0.18);
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.4rem 1.1rem;
+    border-radius: 999px;
+    margin-bottom: 2rem;
+}
+
+.hero-pill-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+}
+
+.hero-heading {
+    font-family: var(--font-display);
+    font-size: clamp(2.75rem, 6vw, 4.25rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+}
+
+.hero-heading-accent {
+    display: block;
+    color: var(--accent);
+}
+
+.hero-desc {
+    font-size: 1.05rem;
+    color: var(--ink-muted);
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+}
+
+.hero-btns {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn-dark {
+    display: inline-block;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0.8rem 1.8rem;
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.btn-dark:hover { background: var(--accent); }
+
+/* ------------------------------------------------------------------ */
+/* Browser mock                                                         */
+/* ------------------------------------------------------------------ */
+
+.hero-mock-browser {
+    max-width: 760px;
+    margin: 0 auto;
+    background: var(--paper-warm);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.06);
+}
+
+.mock-browser-chrome {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.75rem 1rem;
+}
+
+.chrome-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.chrome-dot-red    { background: #ff5f57; }
+.chrome-dot-yellow { background: #ffbd2e; }
+.chrome-dot-green  { background: #27c93f; }
+
+.mock-browser-body {
+    padding: 0 1rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Stat cards                                                           */
+/* ------------------------------------------------------------------ */
+
+.mock-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+
+.mock-stat {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    text-align: left;
+}
+
+.mock-stat-label {
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+}
+
+.mock-stat-value {
+    font-family: var(--font-display);
+    font-size: 1.65rem;
+    color: var(--ink);
+    line-height: 1.15;
+}
+
+.mock-stat-sub {
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+}
+
+.mock-stat-red   { color: var(--danger); }
+.mock-stat-green { color: var(--accent); }
+
+/* ------------------------------------------------------------------ */
+/* Category bar chart                                                   */
+/* ------------------------------------------------------------------ */
+
+.mock-bars-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: left;
+}
+
+.mock-catbar {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    align-items: center;
+    gap: 1rem;
+}
+
+.mock-catbar-label {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    text-align: right;
+}
+
+.mock-catbar-track {
+    height: 10px;
+    background: var(--border-soft);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.mock-catbar-fill {
+    height: 100%;
+    border-radius: 999px;
+}
+
+.mock-catbar-amber  { background: #c17f24; }
+.mock-catbar-blue   { background: #4a90d9; }
+.mock-catbar-indigo { background: #6c5cbf; }
+
+/* ------------------------------------------------------------------ */
+/* Responsive                                                           */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 600px) {
+    .mock-stats-grid { grid-template-columns: 1fr; }
+    .hero-btns { flex-direction: column; align-items: center; }
+}
