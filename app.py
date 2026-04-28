@@ -1,14 +1,54 @@
+import os
 import sqlite3
+from functools import wraps
 
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, session, url_for
+from werkzeug.security import check_password_hash
 
-from database.db import create_user, get_db, init_db, seed_db
+from database.db import (
+    create_user,
+    get_db,
+    get_user_by_email,
+    get_user_by_id,
+    init_db,
+    seed_db,
+)
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "dev-only-change-me")
 
 with app.app_context():
     init_db()
     seed_db()
+
+
+# ------------------------------------------------------------------ #
+# Auth helpers                                                        #
+# ------------------------------------------------------------------ #
+
+def current_user():
+    user_id = session.get("user_id")
+    if user_id is None:
+        return None
+    user = get_user_by_id(user_id)
+    if user is None:
+        session.clear()
+        return None
+    return user
+
+
+@app.context_processor
+def inject_current_user():
+    return {"current_user": current_user()}
+
+
+def login_required(view):
+    @wraps(view)
+    def wrapped(*args, **kwargs):
+        if current_user() is None:
+            return redirect(url_for("login", next=request.path))
+        return view(*args, **kwargs)
+    return wrapped
 
 
 # ------------------------------------------------------------------ #
@@ -50,10 +90,37 @@ def register():
     return render_template("register.html", error=error, name=name, email=email), 400
 
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    success = "Account created. Please sign in." if request.args.get("registered") else None
-    return render_template("login.html", success=success)
+    if request.method == "GET":
+        success = "Account created. Please sign in." if request.args.get("registered") else None
+        return render_template("login.html", success=success)
+
+    email = request.form.get("email", "").strip().lower()
+    password = request.form.get("password", "")
+
+    if not email or not password:
+        return render_template(
+            "login.html",
+            error="Please enter your email and password.",
+            email=email,
+        ), 400
+
+    user = get_user_by_email(email)
+    if user is None or not check_password_hash(user["password_hash"], password):
+        return render_template(
+            "login.html",
+            error="Invalid email or password.",
+            email=email,
+        ), 400
+
+    session.clear()
+    session["user_id"] = user["id"]
+
+    next_url = request.form.get("next") or request.args.get("next")
+    if next_url and next_url.startswith("/") and not next_url.startswith("//"):
+        return redirect(next_url)
+    return redirect(url_for("profile"))
 
 
 @app.route("/terms")
@@ -72,7 +139,8 @@ def privacy():
 
 @app.route("/logout")
 def logout():
-    return "Logout — coming in Step 3"
+    session.clear()
+    return redirect(url_for("landing"))
 
 
 @app.route("/profile")
